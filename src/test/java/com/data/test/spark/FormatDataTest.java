@@ -59,6 +59,8 @@ public final class FormatDataTest implements Serializable {
                 //.config("es.port", "9200")
                 .getOrCreate();
 
+//        spark.read().textFile("").toJavaRDD();
+        
         jsc = new JavaSparkContext(spark.sparkContext());
         JavaPairRDD<String, String> wholeFileLine = jsc.wholeTextFiles(filePath);
 
