@@ -34,8 +34,8 @@ public final class LineFormatData implements Serializable {
         String indexType = args[2];
         String index_type = ES_8583_INDEX_NAME.concat("/").concat(indexType);
 
-        filePath = "file:/D:/workspace/lakala/POSP/logs/log2/";
-       	resPath = "D:\\workspace\\lakala\\POSP\\logs\\result2";
+        filePath = "file:/D:/Workers/workspace/logs/ori/";
+       	resPath = "D:\\Workers\\workspace\\logs\\result";
 
         System.setProperty("HADOOP_USER_NAME", "hadoop");
         System.setProperty("hadoop.home.dir", "D:\\java\\hadoop-2.7.6\\");
