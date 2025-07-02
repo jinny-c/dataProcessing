@@ -60,14 +60,56 @@
 
     <build>
         <plugins>
+            <!-- 跳过测试 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.4</version>
+                <version>3.0.0-M8</version>
                 <configuration>
                     <skipTests>true</skipTests>
-                    <!-- <encoding>UTF-8</encoding> -->
                 </configuration>
+            </plugin>
+
+            <!-- 使用 shade 插件打包依赖（排除 Spark/Hadoop 自身依赖） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <!-- 排除签名文件，避免 JAR 验证错误 -->
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <!-- 合并服务配置文件（如 Jackson 序列化器） -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <!-- 排除 Spark/Hadoop 依赖（这些由集群环境提供） -->
+                            <artifactSet>
+                                <excludes>
+             <!--                       <exclude>org.apache.spark:spark-core_*</exclude>
+                                    <exclude>org.apache.spark:spark-sql_*</exclude>
+                                    <exclude>org.apache.spark:spark-streaming_*</exclude>
+                                    <exclude>org.apache.hadoop:hadoop-client</exclude>-->
+                                    <!-- 根据需要添加更多排除项 -->
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
